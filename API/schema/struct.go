@@ -1,12 +1,13 @@
 package schema
 
+import "time"
 
 type Item struct {
 	Name string `json:"name"`
 	Brand string `json:"brand"`
 	Value int64 `json:"value"`
-	Created string `json:"created"`
-	Expiry string `json:"expiry"`
+	Created time.Time `json:"created"`
+	Expiry time.Time `json:"expiry"`
 }
 
 type ResponseJson struct {
