@@ -1,56 +1,33 @@
 package endpointsHandler
 
-
 import (
 	"../coreFunctions"
 	"errors"
 )
-
-func HandlerCreate(d map[string]interface{})string{
+// HandlerCreate check the parameters,run the CreateUpdate and return the json response
+func HandlerCreateUpdate(d map[string]interface{})string{
 	dict :=make(map[string]interface{})
 	var err error
-	if checkKeys(d,[]string{"name","brand","value","createdAt","expiry"})==true {
+	if CheckKeys(d,[]string{"name","brand","value","createdAt","expiry","update"})==true {
 		e := coreFunctions.CreateUpdate(d["name"].(string),d["brand"].(string),
-			d["value"].(string),d["createdAt"].(string), d["expiry"].(string),false)
+			d["value"].(int64),d["createdAt"].(string), d["expiry"].(string),d["update"].(bool),false)
 		err = e
 	}else{
 		err=errors.New("inputParams: wrong set of input parameters")
 	}
-	return composeJson(dict,err)
+	return ComposeJson(dict,err)
 }
 
-func HandlerUpdate(d map[string]interface{})string{
-	dict :=make(map[string]interface{})
-	var err error
-	if checkKeys(d,[]string{"name","brand","value","createdAt","expiry"})==true {
-		e := coreFunctions.CreateUpdate(d["name"].(string),d["brand"].(string),
-			d["value"].(string),d["createdAt"].(string), d["expiry"].(string),true)
-		err = e
-	}else{
-		err=errors.New("inputParams: wrong set of input parameters")
-	}
-	return composeJson(dict,err)
-}
-
+// HandlerUpdate check the parameters,run the CreateUpdate and return the json response
 func HandlerRetrieve(d map[string]interface{})string{
 	dict :=make(map[string]interface{})
 	var err error
-	if checkKeys(d,[]string{"name"})==true {
-		fullList,e := coreFunctions.Retrieve(d["name"].(string))
+	if CheckKeys(d,[]string{"name"})==true {
+		fullList,e := coreFunctions.Retrieve(d["name"].(string), d["active"].(bool), d["debug"].(bool))
 		err = e
 		dict = map[string]interface{}{"list": fullList}
 	}else{
 		err=errors.New("inputParams: wrong set of input parameters")
 	}
-	return composeJson(dict,err)
-}
-
-
-func HandlerList(_ map[string]interface{})string{
-	dict :=make(map[string]interface{})
-	var err error
-	fullList, e := coreFunctions.List()
-	err = e
-	dict = map[string]interface{}{"list": fullList}
-	return composeJson(dict,err)
+	return ComposeJson(dict,err)
 }
