@@ -19,6 +19,7 @@ func ComposeJson(params map[string]interface{}, err error) (s string) {
 	jsonString, _ := json.MarshalIndent(objR, "", "\t")
 	return string(jsonString)
 }
+
 // CheckKeys checks for the presences of all the keys in the key list passed as parameter
 func CheckKeys(d map[string]interface{}, key []string) bool {
 	for _, v := range key {

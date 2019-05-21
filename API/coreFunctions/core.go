@@ -38,7 +38,7 @@ func CreateUpdate(name,brand string, value int64,created,expiry string,update bo
 	return
 }
 
-// Retrieve returns a s list of records filtered by the name and or if they are active
+// Retrieve returns a list of records filtered by the name and or if they are active
 func Retrieve(name string,active bool, debug bool) (FullList []schema.Item, err error) {
 	// prepare the query
 	query:=bson.M{}

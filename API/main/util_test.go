@@ -1,12 +1,16 @@
 package main
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+)
 
-func TestParseQueryStringToDict(t *testing.T){
-	str := "text=hello&fun=true"
-	dict:=ParseQueryStringToDict(str)
-	if dict["text"]!="hello" {t.Error("Wrong dictionary read")}
+// TestParseQueryStringToDict positive check
+func TestParseQueryStringToDict(t *testing.T) {
+	str := "text=hello&fun=true&num=5656"
+	expected := map[string]interface{}{"text": "hello", "fun": true, "num": int64(5656)}
+	response := ParseQueryStringToDict(str)
+	if !reflect.DeepEqual(expected, response) {
+		t.Error("TestParseQueryStringToDict Dict Parsing Error: expected:", expected, "response:", response)
+	}
 }
-
-
-// TODO: add the test for the util of main

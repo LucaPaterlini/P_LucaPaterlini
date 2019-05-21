@@ -4,6 +4,7 @@ import (
 	"errors"
 	"testing"
 )
+
 // TestComposeJson check the compose json function on error options
 func TestComposeJson(t *testing.T) {
 	// checking composition of json for positive response
@@ -20,7 +21,7 @@ func TestComposeJson(t *testing.T) {
 	}
 	// checking composition of json for an answer with error
 
-	expected=`{
+	expected = `{
 	"err": true,
 	"data": {
 		"errMsg": "funny error message"
@@ -34,14 +35,13 @@ func TestComposeJson(t *testing.T) {
 
 // TestCheckKeys CheckKeys positive and negative
 func TestCheckKeys(t *testing.T) {
-	response :=CheckKeys( map[string]interface{}{"hi":"item"}, []string{"hi"})
-	if !response{
+	response := CheckKeys(map[string]interface{}{"hi": "item"}, []string{"hi"})
+	if !response {
 		t.Error("TestCheckKeys error on positive check")
 	}
-	response =CheckKeys( map[string]interface{}{"hi":"item"}, []string{"hello"})
-	if response{
+	response = CheckKeys(map[string]interface{}{"hi": "item"}, []string{"hello"})
+	if response {
 		t.Error("TestCheckKeys error on negative check")
 	}
-
 
 }

@@ -13,13 +13,12 @@ import (
 )
 
 var (
-	addr = flag.String("addr",schema.IPADDR+":"+strconv.Itoa(schema.PORT),"TCP address to listen to")
-	compress = flag.Bool("compress",false, "Whether to enable transparent response compression ")
-	cache = gocache.New(1*time.Minute, 3*time.Minute)
+	addr     = flag.String("addr", schema.IPADDR+":"+strconv.Itoa(schema.PORT), "TCP address to listen to")
+	compress = flag.Bool("compress", false, "Whether to enable transparent response compression ")
+	cache    = gocache.New(1*time.Minute, 3*time.Minute)
 )
 
-
-func main(){
+func main() {
 
 	// Cors Handler
 	withCors := cors.DefaultHandler()
@@ -29,35 +28,29 @@ func main(){
 	if *compress {
 		h = fasthttp.CompressHandler(h)
 	}
-	if err := fasthttp.ListenAndServe(*addr,h);err != nil{
-		log.Fatalf("Errror in ListenAndServer: %s",err)
+	if err := fasthttp.ListenAndServe(*addr, h); err != nil {
+		log.Fatalf("Errror in ListenAndServer: %s", err)
 	}
 
 }
 
-
 // routing
-func routingHandler (ctx *fasthttp.RequestCtx){
+func routingHandler(ctx *fasthttp.RequestCtx) {
+	// support only Get Requests
+	if !ctx.IsGet() {
+		ctx.Error(schema.ERRPATH, fasthttp.StatusNotFound)
+		return
+	}
 	ctx.SetContentType("text/json; charset=utf-8")
-
 	switch string(ctx.Path()) {
-	//Call n°0
-	case "/create":
-		middlewareEndpoint(ctx,endpointsHandler.HandlerCreate)
 
-	//Call n°1
-	case "/update":
-		middlewareEndpoint(ctx,endpointsHandler.HandlerUpdate)
+	case "/createupdate":
+		middlewareEndpoint(ctx, endpointsHandler.HandlerCreateUpdate)
 
-	//Call n°2
-	case "/retrive":
-		middlewareEndpoint(ctx,endpointsHandler.HandlerRetrieve)
-
-	//Call n°3
-	case "/all":
-		middlewareEndpoint(ctx,endpointsHandler.HandlerList)
+	case "/retrieve":
+		middlewareEndpoint(ctx, endpointsHandler.HandlerRetrieve)
 
 	default:
-		ctx.Error(schema.ERRPATH,fasthttp.StatusNotFound)
+		ctx.Error(schema.ERRPATH, fasthttp.StatusNotFound)
 	}
 }
