@@ -2,8 +2,8 @@ package endpointsHandler
 
 import (
 	"encoding/json"
+	"github.com/LucaPaterlini/P_LucaPaterlini/API/schema"
 )
-import "../schema"
 
 // ComposeJson return a formatted json ready to be sent as response message
 // taking as input the parameters to return and if present the error
