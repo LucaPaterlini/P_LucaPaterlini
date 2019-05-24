@@ -24,7 +24,7 @@ func TestHandler_HandlerCreateUpdate(t *testing.T) {
 	_, err = table.RemoveAll(bson.M{})
 
 	// adding the debug param
-	m := HandlerStruct{Debug: true}
+	m := HandlerStruct{Collection: table}
 	params := "?name=Save £20 at Tesco&brand=Tesco&value=20&createdAt=2018-03-01 10:15:53&expiry=2019-03-01 10:15:53&update=true"
 	request, _ := http.NewRequest("GET", "/createupdate"+params, nil)
 
@@ -131,7 +131,7 @@ func TestHandlerStruct_HandlerRetrieve(t *testing.T) {
 		err = table.Insert(&item)
 	}
 	// adding the debug param
-	m := HandlerStruct{Debug: true}
+	m := HandlerStruct{Collection: table}
 	// request 1 check specific name
 	params := "?name=Tesco0&active=false"
 	request, _ := http.NewRequest("GET", "/retrieve"+params, nil)

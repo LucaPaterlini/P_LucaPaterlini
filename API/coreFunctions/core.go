@@ -7,19 +7,13 @@ import (
 	"time"
 )
 import "../schema"
-import "../coreDatabase"
 
 // CreateUpdate create or update the collection with the new record depending on the update param
 // using the database and collection for production if debug is false otherwise it utilizes the
 // settings for debug
-func CreateUpdate(name, brand string, value int64, created, expiry string, update bool, debug bool) (err error) {
-	var perksTable *mgo.Collection
+func CreateUpdate(name, brand string, value int64, created, expiry string, update bool, collection *mgo.Collection) (err error) {
 	var tCreated, tExpiry time.Time
-	// establishing the connection
-	perksTable, err = coreDatabase.DatabaseConnect(debug)
-	if err != nil {
-		return
-	}
+
 	// converting created and expiry from str to time
 	layout := "2006-01-02 15:04:05"
 	if tCreated, err = time.Parse(layout, created); err != nil {
@@ -38,17 +32,17 @@ func CreateUpdate(name, brand string, value int64, created, expiry string, updat
 	}
 
 	if update {
-		err = perksTable.Update(bson.M{"name": name}, bson.M{"$set": item})
+		err = collection.Update(bson.M{"name": name}, bson.M{"$set": item})
 	}
 	if !update || (err != nil && err.Error() == "not found") {
-		err = perksTable.Insert(&item)
+		err = collection.Insert(&item)
 
 	}
 	return
 }
 
 // Retrieve returns a list of records filtered by the name and or if they are active
-func Retrieve(name string, active bool, starttime time.Time, debug bool) (FullList []schema.Item, err error) {
+func Retrieve(name string, active bool, starttime time.Time, collection *mgo.Collection) (FullList []schema.Item, err error) {
 	// debug fmt.Println("Parameters",name,active,starttime,debug)
 	// prepare the query
 	query := bson.M{}
@@ -59,19 +53,8 @@ func Retrieve(name string, active bool, starttime time.Time, debug bool) (FullLi
 		query["created"] = bson.M{"$lt": starttime}
 		query["expiry"] = bson.M{"$gt": starttime}
 	}
-	var perksTable *mgo.Collection
-	// establishing the connection
-	perksTable, err = coreDatabase.DatabaseConnect(debug)
-	if err != nil {
-		return
-	}
 	// retrieve the data
-	err = perksTable.Find(query).All(&FullList)
+	err = collection.Find(query).All(&FullList)
 	//debug :fmt.Println(FullList)
 	return
 }
-//
-//func main() {
-//	list, _ := Retrieve("*",false,time.Now(),true)
-//	fmt.Println(list)
-//}

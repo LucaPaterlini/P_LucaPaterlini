@@ -22,7 +22,7 @@ func TestCreateUpdate(t *testing.T) {
 
 	// 1 executing the Create
 	err = CreateUpdate("Save £20 at Tesco",
-		"Tesco", 20, "2018-03-01 10:15:53", "2019-03-01 10:15:53", false, true)
+		"Tesco", 20, "2018-03-01 10:15:53", "2019-03-01 10:15:53", false, table)
 	if err != nil {
 		t.Error("TestCreateUpdate: Create:  Error: " + err.Error())
 	}
@@ -50,7 +50,7 @@ func TestCreateUpdate(t *testing.T) {
 	// checking the response of 2 insertions of the same element
 	// create 2
 	err = CreateUpdate("Save £20 at Tesco",
-		"Tesco", 20, "2018-03-01 10:15:53", "2019-03-01 10:15:53", false, true)
+		"Tesco", 20, "2018-03-01 10:15:53", "2019-03-01 10:15:53", false, table)
 	if err != nil {
 		if !mgo.IsDup(err) {
 			t.Error(err.Error())
@@ -59,7 +59,7 @@ func TestCreateUpdate(t *testing.T) {
 	//
 	//// Checking the update functionality
 	err = CreateUpdate("Save £20 at Tesco",
-		"Tesco", 8, "2055-03-01 1:15:53", "2088-03-01 06:05:01", true, true)
+		"Tesco", 8, "2055-03-01 1:15:53", "2088-03-01 06:05:01", true, table)
 	if err != nil {
 		t.Error("TestCreateUpdate: Update:  Error: " + err.Error())
 	}
@@ -104,7 +104,7 @@ func TestRetrieve(t *testing.T) {
 		err = table.Insert(&item)
 	}
 	// query: filter by name
-	FullList, err := Retrieve("Tesco0", false, time.Time{}, true)
+	FullList, err := Retrieve("Tesco0", false, time.Time{}, table)
 	if err != nil {
 		t.Error("TestRetrieve Retrieve Error: " + err.Error())
 		return
@@ -120,7 +120,7 @@ func TestRetrieve(t *testing.T) {
 	layout := "2006-01-02T15:04:05.000Z"
 	str := "2019-05-25T11:45:26.371Z"
 	startTime, _ := time.Parse(layout, str)
-	FullList, err = Retrieve("*", true, startTime, true)
+	FullList, err = Retrieve("*", true, startTime, table)
 	if err != nil {
 		t.Error("TestRetrieve Retrieve Active Error: " + err.Error())
 		return
@@ -130,7 +130,7 @@ func TestRetrieve(t *testing.T) {
 	}
 
 	// query: all the offers
-	FullList, err = Retrieve("*", false, time.Time{}, true)
+	FullList, err = Retrieve("*", false, time.Time{}, table)
 	if err != nil {
 		t.Error("TestRetrieve Retrieve Active Error: " + err.Error())
 		return

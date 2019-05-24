@@ -12,9 +12,9 @@ import (
 	"strconv"
 	"time"
 )
-
+//HandlerStruct handler for the endpoints
 type HandlerStruct struct {
-	Debug bool
+	Collection *mgo.Collection
 }
 
 // setDefaultHeaders set the default values of the header
@@ -48,7 +48,7 @@ func (ctx HandlerStruct) HandlerCreateUpdate(w http.ResponseWriter, r *http.Requ
 		// checking the correct execution of CreateUpdate
 		if err == nil {
 			err = coreFunctions.CreateUpdate(m.Get("name"), m.Get("brand"),
-				value, m.Get("createdAt"), m.Get("expiry"), update, ctx.Debug)
+				value, m.Get("createdAt"), m.Get("expiry"), update, ctx.Collection)
 			if err != nil {
 				if mgo.IsDup(err) {
 					err = errors.New(r.URL.Path + ": Entry Duplicate")
@@ -87,7 +87,7 @@ func (ctx HandlerStruct) HandlerRetrieve(w http.ResponseWriter, r *http.Request)
 		}
 		// checking the correct execution of Retrieve
 		if err == nil {
-			fullList, e := coreFunctions.Retrieve(m.Get("name"), active, time.Now(), ctx.Debug)
+			fullList, e := coreFunctions.Retrieve(m.Get("name"), active, time.Now(), ctx.Collection)
 			err = e
 			dict = map[string]interface{}{"list": fullList}
 			if err != nil {
