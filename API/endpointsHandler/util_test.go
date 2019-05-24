@@ -20,7 +20,6 @@ func TestComposeJson(t *testing.T) {
 		t.Errorf("TestComposeJson Error Nill expected %s and got %s instead", response, expected)
 	}
 	// checking composition of json for an answer with error
-
 	expected = `{
 	"err": true,
 	"data": {
@@ -31,17 +30,4 @@ func TestComposeJson(t *testing.T) {
 	if response != expected {
 		t.Errorf("TestComposeJson Error Msg expected %s and got %s instead", response, expected)
 	}
-}
-
-// TestCheckKeys CheckKeys positive and negative
-func TestCheckKeys(t *testing.T) {
-	response := CheckKeys(map[string]interface{}{"hi": "item"}, []string{"hi"})
-	if !response {
-		t.Error("TestCheckKeys error on positive check")
-	}
-	response = CheckKeys(map[string]interface{}{"hi": "item"}, []string{"hello"})
-	if response {
-		t.Error("TestCheckKeys error on negative check")
-	}
-
 }
