@@ -1,8 +1,8 @@
 package endpointsHandler
 
 import (
-	"../coreDatabase"
 	"fmt"
+	"github.com/LucaPaterlini/P_LucaPaterlini/API/coreDatabase"
 	"github.com/globalsign/mgo/bson"
 	"net/http"
 	"net/http/httptest"

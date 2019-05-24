@@ -1,8 +1,8 @@
 package coreFunctions
 
 import (
-	"../coreDatabase"
-	"../schema"
+	"github.com/LucaPaterlini/P_LucaPaterlini/API/coreDatabase"
+	"github.com/LucaPaterlini/P_LucaPaterlini/API/schema"
 	"github.com/globalsign/mgo"
 	"github.com/globalsign/mgo/bson"
 	"strconv"

@@ -1,9 +1,9 @@
 package main
 
 import (
-	"../coreDatabase"
-	"../endpointsHandler"
 	"flag"
+	"github.com/LucaPaterlini/P_LucaPaterlini/API/coreDatabase"
+	"github.com/LucaPaterlini/P_LucaPaterlini/API/endpointsHandler"
 	"log"
 	"net/http"
 )
@@ -11,14 +11,14 @@ import (
 func main() {
 	flag.Parse()
 	// database connection
-	perkstable, err := coreDatabase.DatabaseConnect(false)
+	perksTable, err := coreDatabase.DatabaseConnect(false)
 	if err!=nil {
 		log.Println(err)
 		return
 	}
 
 	// adding the handlers
-	m := endpointsHandler.HandlerStruct{Collection: perkstable}
+	m := endpointsHandler.HandlerStruct{Collection: perksTable}
 	http.HandleFunc("/createupdate", m.HandlerCreateUpdate)
 	http.HandleFunc("/retrieve", m.HandlerRetrieve)
 	log.Fatal(http.ListenAndServe(":8080", nil))

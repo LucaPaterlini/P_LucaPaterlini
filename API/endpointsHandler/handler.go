@@ -3,8 +3,8 @@
 package endpointsHandler
 
 import (
-	"../coreFunctions"
 	"errors"
+	"github.com/LucaPaterlini/P_LucaPaterlini/API/coreFunctions"
 	"github.com/globalsign/mgo"
 	"log"
 	"net/http"

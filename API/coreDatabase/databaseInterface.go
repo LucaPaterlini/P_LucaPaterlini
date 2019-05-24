@@ -2,7 +2,7 @@
 package coreDatabase
 
 import (
-	"../schema"
+	"github.com/LucaPaterlini/P_LucaPaterlini/API/schema"
 	"github.com/globalsign/mgo"
 )
 

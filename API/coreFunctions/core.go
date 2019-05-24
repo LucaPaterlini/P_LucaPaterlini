@@ -2,11 +2,11 @@
 package coreFunctions
 
 import (
+	"github.com/LucaPaterlini/P_LucaPaterlini/API/schema"
 	"github.com/globalsign/mgo"
 	"github.com/globalsign/mgo/bson"
 	"time"
 )
-import "../schema"
 
 // CreateUpdate create or update the collection with the new record depending on the update param
 // using the database and collection for production if debug is false otherwise it utilizes the
