@@ -31,7 +31,7 @@ func TestHandler_HandlerCreateUpdate(t *testing.T) {
 	// request 1 expected positive
 	response := httptest.NewRecorder()
 	m.HandlerCreateUpdate(response, request)
-	if 200 != response.Code {
+	if http.StatusOK != response.Code {
 		t.Errorf("Response code expected: 200, received: %d", response.Code)
 	}
 	expected := `{
@@ -45,7 +45,7 @@ func TestHandler_HandlerCreateUpdate(t *testing.T) {
 	// request 2 expected positive
 	response = httptest.NewRecorder()
 	m.HandlerCreateUpdate(response, request)
-	if 200 != response.Code {
+	if http.StatusOK != response.Code {
 		t.Errorf("Response code expected: 200, received: %d", response.Code)
 	}
 	received = response.Body.String()
@@ -64,8 +64,8 @@ func TestHandler_HandlerCreateUpdate(t *testing.T) {
 }`
 
 	m.HandlerCreateUpdate(response, request)
-	if 400 != response.Code {
-		t.Errorf("Response code expected: 200, received: %d", response.Code)
+	if http.StatusBadRequest != response.Code {
+		t.Errorf("Response code expected: 405, received: %d", response.Code)
 	}
 	received = response.Body.String()
 	if received != expected {
@@ -77,16 +77,16 @@ func TestHandler_HandlerCreateUpdate(t *testing.T) {
 	params = "?name=Save £20 at Tesco&brand=Tesco&value=20&createdAt=2018-03-01 10:15:53&expiry=2019-03-01 10:15:53&update=banan"
 	request, _ = http.NewRequest("GET", "/createupdate"+params, nil)
 	response = httptest.NewRecorder()
+	m.HandlerCreateUpdate(response, request)
+	if http.StatusBadRequest != response.Code {
+		t.Errorf("Response code expected: 400, received: %d", response.Code)
+	}
 	expected = `{
 	"err": true,
 	"data": {
 		"errMsg": "/createupdate: wrong set of input parameters"
 	}
 }`
-	m.HandlerCreateUpdate(response, request)
-	if 400 != response.Code {
-		t.Errorf("Response code expected: 200, received: %d", response.Code)
-	}
 	received = response.Body.String()
 	if received != expected {
 		t.Errorf("Unexpected Response: expected %s, received %s", expected, received)
@@ -98,7 +98,7 @@ func TestHandler_HandlerCreateUpdate(t *testing.T) {
 		request, _ = http.NewRequest(method, "/createupdate"+params, nil)
 		response = httptest.NewRecorder()
 		m.HandlerCreateUpdate(response, request)
-		if 405 != response.Code {
+		if http.StatusMethodNotAllowed != response.Code {
 			t.Error("Wrong forbidden method response")
 		}
 
@@ -139,7 +139,7 @@ func TestHandlerStruct_HandlerRetrieve(t *testing.T) {
 	m.HandlerRetrieve(response, request)
 	received := response.Body.String()
 
-	if 200 != response.Code {
+	if http.StatusOK != response.Code {
 		t.Errorf("Response code expected: 200, received: %d", response.Code)
 	}
 	expected := `{
@@ -165,7 +165,7 @@ func TestHandlerStruct_HandlerRetrieve(t *testing.T) {
 	request, _ = http.NewRequest("GET", "/retrieve"+params, nil)
 	response = httptest.NewRecorder()
 	m.HandlerRetrieve(response, request)
-	if 200 != response.Code {
+	if http.StatusOK != response.Code {
 		t.Errorf("Response code expected: 200, received: %d", response.Code)
 	}
 	expected = `{
@@ -200,7 +200,7 @@ func TestHandlerStruct_HandlerRetrieve(t *testing.T) {
 	m.HandlerRetrieve(response, request)
 	received = response.Body.String()
 
-	if 200 != response.Code {
+	if http.StatusOK != response.Code {
 		t.Errorf("Response code expected: 200, received: %d", response.Code)
 	}
 	expected = `{
@@ -248,8 +248,8 @@ func TestHandlerStruct_HandlerRetrieve(t *testing.T) {
 	m.HandlerRetrieve(response, request)
 	received = response.Body.String()
 
-	if 400 != response.Code {
-		t.Errorf("Response code expected: 200, received: %d", response.Code)
+	if http.StatusBadRequest != response.Code {
+		t.Errorf("Response code expected: 400, received: %d", response.Code)
 	}
 	expected = `{
 	"err": true,
@@ -261,7 +261,16 @@ func TestHandlerStruct_HandlerRetrieve(t *testing.T) {
 		t.Errorf("Unexpected Response: expected %s, received %s", expected, received)
 	}
 
+	// checking that only GET is a valid method
+	for _, method := range []string{"HEAD", "POST", "PUT", "DELETE", "CONNECT", "OPTIONS", "TRACE"} {
+		request, _ = http.NewRequest(method, "/retrieve", nil)
+		response = httptest.NewRecorder()
+		m.HandlerCreateUpdate(response, request)
+		if http.StatusMethodNotAllowed != response.Code {
+			t.Error("Wrong forbidden method response")
+		}
 
+	}
 	// cleanup
-	_ = table.DropCollection()
+	_, _ = table.RemoveAll(bson.M{})
 }

@@ -42,7 +42,7 @@ func (ctx HandlerStruct) HandlerCreateUpdate(w http.ResponseWriter, r *http.Requ
 		if err != nil {
 			log.Print(err.Error())
 			err = errors.New(r.URL.Path + ": wrong set of input parameters")
-			w.WriteHeader(400)
+			w.WriteHeader(http.StatusBadRequest)
 
 		}
 		// checking the correct execution of CreateUpdate
@@ -52,10 +52,10 @@ func (ctx HandlerStruct) HandlerCreateUpdate(w http.ResponseWriter, r *http.Requ
 			if err != nil {
 				if mgo.IsDup(err) {
 					err = errors.New(r.URL.Path + ": Entry Duplicate")
-					w.WriteHeader(400)
+					w.WriteHeader(http.StatusBadRequest)
 				} else {
 					err = errors.New(r.URL.Path + ": InternalError")
-					w.WriteHeader(500)
+					w.WriteHeader(http.StatusInternalServerError)
 				}
 			}
 		}
@@ -63,11 +63,11 @@ func (ctx HandlerStruct) HandlerCreateUpdate(w http.ResponseWriter, r *http.Requ
 		_, err = w.Write([]byte(ComposeJson(dict, err)))
 		if err != nil {
 			log.Print(err.Error())
-			w.WriteHeader(500)
+			w.WriteHeader(http.StatusInternalServerError)
 		}
 		return
 	} else {
-		w.WriteHeader(405)
+		w.WriteHeader(http.StatusMethodNotAllowed)
 	}
 }
 
