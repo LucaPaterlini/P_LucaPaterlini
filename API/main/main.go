@@ -6,12 +6,15 @@ import (
 	"github.com/LucaPaterlini/P_LucaPaterlini/API/endpointsHandler"
 	"log"
 	"net/http"
+	"os"
+	"time"
 )
 
 const (
 	PORT    = 8080
 	IPADDR  = "127.0.0.1"
-	ERRPATH = "{\"error\":\"Unsupported Path\"}"
+	RTOUT = 10
+	WTOUT = 10
 )
 
 func main() {
@@ -28,5 +31,23 @@ func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/createupdate", m.HandlerCreateUpdate)
 	mux.HandleFunc("/retrieve", m.HandlerRetrieve)
-	log.Fatal(http.ListenAndServe(":8080", mux))
+	// setting the timeout for the service responses
+	srv := &http.Server {
+		Handler:mux,
+		Addr : IPADDR+":"+string(PORT),
+		ReadTimeout: RTOUT *time.Second,
+		WriteTimeout: WTOUT * time.Second,
+	}
+
+	// Configure Logging
+	LogFileLocation := os.Getenv("LOG_FILE_LOCATION")
+	f, err := os.OpenFile(LogFileLocation, os.O_RDWR | os.O_CREATE | os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatalf("error opening file: %v", err)
+	}
+	defer f.Close()
+
+	log.SetOutput(f)
+	// start the service
+	log.Fatal(srv.ListenAndServe())
 }
