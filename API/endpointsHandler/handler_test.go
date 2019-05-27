@@ -16,7 +16,7 @@ import (
 // 500 has not been tested
 func TestHandler_HandlerCreateUpdate(t *testing.T) {
 	// drop the debug database
-	table, err := coreDatabase.DatabaseConnect(true)
+	table, err := coreDatabase.TableConnect(true,"perk",[]string{"name", "brand", "value", "created", "expiry"})
 	if err != nil {
 		t.Error("TestCreateUpdate Connection Error: " + err.Error())
 		return
@@ -112,7 +112,7 @@ func TestHandler_HandlerCreateUpdate(t *testing.T) {
 // 500 has not been tested
 func TestHandlerStruct_HandlerRetrieve(t *testing.T) {
 	// drop the debug database
-	table, err := coreDatabase.DatabaseConnect(true)
+	table, err := coreDatabase.TableConnect(true, "perk",[]string{"name", "brand", "value", "created", "expiry"})
 	if err != nil {
 		t.Error("TestCreateUpdate Connection Error: " + err.Error())
 		return
