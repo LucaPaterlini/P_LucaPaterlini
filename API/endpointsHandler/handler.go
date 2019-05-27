@@ -12,6 +12,7 @@ import (
 	"strconv"
 	"time"
 )
+
 //HandlerStruct handler for the endpoints
 type HandlerStruct struct {
 	Collection *mgo.Collection

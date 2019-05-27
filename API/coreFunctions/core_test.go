@@ -12,7 +12,7 @@ import (
 // TestCreateUpdate checks the function that update or create a new record
 func TestCreateUpdate(t *testing.T) {
 	// drop the debug database
-	table, err := coreDatabase.TableConnect(true, "perk",[]string{"name", "brand", "value", "created", "expiry"})
+	table, err := coreDatabase.TableConnect(true, "perk", []string{"name", "brand", "value", "created", "expiry"})
 	if err != nil {
 		t.Error("TestCreateUpdate Connection Error: " + err.Error())
 		return
@@ -84,7 +84,7 @@ func TestCreateUpdate(t *testing.T) {
 // TestRetrieve checks the retrive against a suite of test queries
 func TestRetrieve(t *testing.T) {
 	// drop the debug database
-	table, err := coreDatabase.TableConnect(true,"perk",[]string{"name", "brand", "value", "created", "expiry"})
+	table, err := coreDatabase.TableConnect(true, "perk", []string{"name", "brand", "value", "created", "expiry"})
 	if err != nil {
 		t.Error("TestRetrieve Connection Error: " + err.Error())
 		return

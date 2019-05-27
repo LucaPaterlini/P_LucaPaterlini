@@ -4,7 +4,6 @@ import (
 	"time"
 )
 
-
 //Item struct of the items of the perkstable
 type Item struct {
 	Name    string    `json:"name"`

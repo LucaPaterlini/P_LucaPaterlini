@@ -12,23 +12,21 @@ import (
 )
 
 const (
-	PORT    = 8080
-	IPADDR  = "127.0.0.1"
-	ReadTimeout = 10
-	WriteTimeout = 10
+	PORT                    = 8080
+	IPADDR                  = "127.0.0.1"
+	ReadTimeout             = 10
+	WriteTimeout            = 10
 	LimitCleanUpRefreshTime = 1
-	LimitClenaUpExpiry = 5
-	LimitRefresh  = 2
-	LimitBucket    = 3
-
-
+	LimitClenaUpExpiry      = 5
+	LimitRefresh            = 2
+	LimitBucket             = 3
 )
 
 func main() {
 	flag.Parse()
 	// database connection
-	perksTable, err := coreDatabase.TableConnect(false,"perk",[]string{"name", "brand", "value", "created", "expiry"})
-	if err!=nil {
+	perksTable, err := coreDatabase.TableConnect(false, "perk", []string{"name", "brand", "value", "created", "expiry"})
+	if err != nil {
 		log.Println(err)
 		return
 	}
@@ -47,19 +45,18 @@ func main() {
 		B:                  LimitBucket,
 	}
 
-
 	// setting the timeout for the service responses and the limit control
-	srv := &http.Server {
+	srv := &http.Server{
 		// appending the middleware
-		Handler:l.Limit(mux),
-		Addr : IPADDR+":"+string(PORT),
-		ReadTimeout: ReadTimeout *time.Second,
+		Handler:      l.Limit(mux),
+		Addr:         IPADDR + ":" + string(PORT),
+		ReadTimeout:  ReadTimeout * time.Second,
 		WriteTimeout: WriteTimeout * time.Second,
 	}
 
 	// Configure Logging
 	LogFileLocation := os.Getenv("LOG_FILE_LOCATION")
-	f, err := os.OpenFile(LogFileLocation, os.O_RDWR | os.O_CREATE | os.O_APPEND, 0666)
+	f, err := os.OpenFile(LogFileLocation, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		log.Fatalf("error opening file: %v", err)
 	}
