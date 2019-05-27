@@ -30,12 +30,13 @@ func TableConnect(debug bool, table string, indexkyes []string) (perksTable *mgo
 		perksTable = mongoSession.DB(database).C(table)
 	}
 	// checking the indexing the test database
+	if len(indexkyes)>0 {
 
-	index := mgo.Index{
-		Key:    indexkyes,
-		Unique: true,
+		index := mgo.Index{
+			Key:    indexkyes,
+			Unique: true,
+		}
+		err = perksTable.EnsureIndex(index)
 	}
-	err = perksTable.EnsureIndex(index)
-
 	return
 }
