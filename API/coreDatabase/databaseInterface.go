@@ -2,38 +2,37 @@
 package coreDatabase
 
 import (
-	"github.com/LucaPaterlini/P_LucaPaterlini/API/schema"
 	"github.com/globalsign/mgo"
+	"sync"
 )
 
-var connections map[string]*mgo.Collection
+var connections sync.Map
 
 // DatabaseConnect create a connection to the appropriate database depending on debug param
-func DatabaseConnect(debug bool) (perksTable *mgo.Collection, err error) {
+func TableConnect(debug bool, table string, indexkyes []string) (perksTable *mgo.Collection, err error) {
 	var location, database string
 	if debug {
-		location = schema.MONGODBHOSTSDEBUG + "/" + schema.MONGODBDATABASEDEBUG
-		database = schema.MONGODBDATABASEDEBUG
+		location = MONGODBHOSTSDEBUG + "/" + MONGODBDATABASEDEBUG
+		database = MONGODBDATABASEDEBUG
 	} else {
-		location = schema.MONGODBHOSTS + "/" + schema.MONGODBDATABASE
-		database = schema.MONGODBDATABASE
+		location = MONGODBHOSTS + "/" + MONGODBDATABASE
+		database = MONGODBDATABASE
 	}
 
-	if val, ok := connections[location]; ok {
-		perksTable = val
+	if val, ok := connections.Load(location); ok {
+		perksTable = val.(*mgo.Collection)
 	} else {
 		var mongoSession *mgo.Session
 		mongoSession, err = mgo.Dial(location)
 		if err != nil {
 			return
 		}
-		perksTable = mongoSession.DB(database).C("perks")
+		perksTable = mongoSession.DB(database).C(table)
 	}
-	// checking the indexing
-	// setting the index on the test database
+	// checking the indexing the test database
 
 	index := mgo.Index{
-		Key:    []string{"name", "brand", "value", "created", "expiry"},
+		Key:    indexkyes,
 		Unique: true,
 	}
 	err = perksTable.EnsureIndex(index)

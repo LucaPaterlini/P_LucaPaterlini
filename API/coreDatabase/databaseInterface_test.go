@@ -6,11 +6,11 @@ import (
 
 // TestDatabaseConnect checks the function that connect to database
 func TestDatabaseConnect(t *testing.T) {
-	_, err := DatabaseConnect(false)
+	_, err := TableConnect(false, "perk",[]string{"name", "brand", "value", "created", "expiry"})
 	if err != nil {
 		t.Error("TestdatabaseConnect Prod Error: " + err.Error())
 	}
-	_, err = DatabaseConnect(true)
+	_, err = TableConnect(true, "perk",[]string{"name", "brand", "value", "created", "expiry"})
 	if err != nil {
 		t.Error("TestdatabaseConnect Debug Error: " + err.Error())
 	}

@@ -1,4 +1,4 @@
-package schema
+package coreFunctions
 
 import (
 	"time"
@@ -12,9 +12,4 @@ type Item struct {
 	Value   int64     `json:"value"`
 	Created time.Time `json:"created"`
 	Expiry  time.Time `json:"expiry"`
-}
-//ResponseJson tamplete for every json answer of the api
-type ResponseJson struct {
-	Err  bool                   `json:"err"`
-	Data map[string]interface{} `json:"data"`
 }

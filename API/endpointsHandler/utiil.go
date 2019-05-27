@@ -2,13 +2,14 @@ package endpointsHandler
 
 import (
 	"encoding/json"
-	"github.com/LucaPaterlini/P_LucaPaterlini/API/schema"
 )
+
+
 
 // ComposeJson return a formatted json ready to be sent as response message
 // taking as input the parameters to return and if present the error
 func ComposeJson(params map[string]interface{}, err error) (s string) {
-	objR := &schema.ResponseJson{}
+	objR := &ResponseJson{}
 	objR.Err = err != nil
 	objR.Data = make(map[string]interface{})
 	if err == nil {

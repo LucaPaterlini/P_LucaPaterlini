@@ -2,7 +2,6 @@
 package coreFunctions
 
 import (
-	"github.com/LucaPaterlini/P_LucaPaterlini/API/schema"
 	"github.com/globalsign/mgo"
 	"github.com/globalsign/mgo/bson"
 	"time"
@@ -42,7 +41,7 @@ func CreateUpdate(name, brand string, value int64, created, expiry string, updat
 }
 
 // Retrieve returns a list of records filtered by the name and or if they are active
-func Retrieve(name string, active bool, starttime time.Time, collection *mgo.Collection) (FullList []schema.Item, err error) {
+func Retrieve(name string, active bool, starttime time.Time, collection *mgo.Collection) (FullList []Item, err error) {
 	// debug fmt.Println("Parameters",name,active,starttime,debug)
 	// prepare the query
 	query := bson.M{}

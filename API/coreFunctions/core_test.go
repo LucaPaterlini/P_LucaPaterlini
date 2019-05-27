@@ -1,8 +1,7 @@
 package coreFunctions
 
 import (
-	"github.com/LucaPaterlini/P_LucaPaterlini/API/coreDatabase"
-	"github.com/LucaPaterlini/P_LucaPaterlini/API/schema"
+	"../coreDatabase"
 	"github.com/globalsign/mgo"
 	"github.com/globalsign/mgo/bson"
 	"strconv"
@@ -13,7 +12,7 @@ import (
 // TestCreateUpdate checks the function that update or create a new record
 func TestCreateUpdate(t *testing.T) {
 	// drop the debug database
-	table, err := coreDatabase.DatabaseConnect(true)
+	table, err := coreDatabase.TableConnect(true, "perk",[]string{"name", "brand", "value", "created", "expiry"})
 	if err != nil {
 		t.Error("TestCreateUpdate Connection Error: " + err.Error())
 		return
@@ -37,7 +36,7 @@ func TestCreateUpdate(t *testing.T) {
 	}
 
 	// checking the effect of the create
-	var item schema.Item
+	var item Item
 	err = table.Find(bson.M{"name": "Save £20 at Tesco"}).One(&item)
 	if err != nil {
 		t.Error("TestCreateUpdate: CheckCreateFind:  Error: " + err.Error())
@@ -85,7 +84,7 @@ func TestCreateUpdate(t *testing.T) {
 // TestRetrieve checks the retrive against a suite of test queries
 func TestRetrieve(t *testing.T) {
 	// drop the debug database
-	table, err := coreDatabase.DatabaseConnect(true)
+	table, err := coreDatabase.TableConnect(true,"perk",[]string{"name", "brand", "value", "created", "expiry"})
 	if err != nil {
 		t.Error("TestRetrieve Connection Error: " + err.Error())
 		return
@@ -109,7 +108,7 @@ func TestRetrieve(t *testing.T) {
 		t.Error("TestRetrieve Retrieve Error: " + err.Error())
 		return
 	}
-	compareItem := schema.Item{Name: "Tesco0", Brand: "Tesco", Value: 1,
+	compareItem := Item{Name: "Tesco0", Brand: "Tesco", Value: 1,
 		Created: time.Date(2018, 0, 4, 0, 0, 0, 0, time.UTC),
 		Expiry:  time.Date(2018, 2, 4, 0, 0, 0, 0, time.UTC),
 	}
